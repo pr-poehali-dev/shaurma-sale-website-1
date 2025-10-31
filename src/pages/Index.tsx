@@ -108,7 +108,7 @@ export default function Index() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className="text-3xl">🌯</span>
-              <h1 className="text-2xl font-bold text-foreground">ШаурмаБар</h1>
+              <h1 className="text-2xl font-bold text-foreground">МаксВЛавашике</h1>
             </div>
             <nav className="hidden md:flex items-center gap-6">
               <button onClick={() => scrollToSection('hero')} className="text-sm font-medium hover:text-primary transition-colors">Главная</button>
@@ -374,7 +374,7 @@ export default function Index() {
             <Card className="p-6 text-center space-y-3 hover:shadow-lg transition-shadow">
               <Icon name="Mail" size={32} className="mx-auto text-primary" />
               <h3 className="font-semibold">Email</h3>
-              <p className="text-muted-foreground">info@shaurma-bar.ru</p>
+              <p className="text-muted-foreground">info@maxvlavashike.ru</p>
             </Card>
 
             <Card className="p-6 text-center space-y-3 hover:shadow-lg transition-shadow">
@@ -391,9 +391,9 @@ export default function Index() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-2">
               <span className="text-2xl">🌯</span>
-              <span className="font-bold text-lg">ШаурмаБар</span>
+              <span className="font-bold text-lg">МаксВЛавашике</span>
             </div>
-            <p className="text-sm opacity-80">© 2024 ШаурмаБар. Все права защищены</p>
+            <p className="text-sm opacity-80">© 2024 МаксВЛавашике. Все права защищены</p>
             <div className="flex gap-4">
               <Button variant="ghost" size="icon">
                 <Icon name="Instagram" size={20} />
