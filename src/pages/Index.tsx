@@ -412,24 +412,56 @@ export default function Index() {
             <p className="text-muted-foreground text-lg">Свяжитесь с нами</p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            <Card className="p-6 text-center space-y-3 hover:shadow-lg transition-shadow">
-              <Icon name="Phone" size={32} className="mx-auto text-primary" />
-              <h3 className="font-semibold">Телефон</h3>
-              <p className="text-muted-foreground">+7 924 523 4812</p>
-            </Card>
+          <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto items-center">
+            <div className="space-y-6">
+              <Card className="p-6 space-y-3 hover:shadow-lg transition-shadow">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                    <Icon name="Phone" size={24} className="text-primary" />
+                  </div>
+                  <div className="text-left">
+                    <h3 className="font-semibold">Телефон</h3>
+                    <p className="text-muted-foreground">+7 924 523 4812</p>
+                  </div>
+                </div>
+              </Card>
 
-            <Card className="p-6 text-center space-y-3 hover:shadow-lg transition-shadow">
-              <Icon name="Mail" size={32} className="mx-auto text-primary" />
-              <h3 className="font-semibold">Email</h3>
-              <p className="text-muted-foreground">info@maxvlavashike.ru</p>
-            </Card>
+              <Card className="p-6 space-y-3 hover:shadow-lg transition-shadow">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                    <Icon name="Mail" size={24} className="text-primary" />
+                  </div>
+                  <div className="text-left">
+                    <h3 className="font-semibold">Email</h3>
+                    <p className="text-muted-foreground">info@maxvlavashike.ru</p>
+                  </div>
+                </div>
+              </Card>
 
-            <Card className="p-6 text-center space-y-3 hover:shadow-lg transition-shadow">
-              <Icon name="MapPin" size={32} className="mx-auto text-primary" />
-              <h3 className="font-semibold">Адрес</h3>
-              <p className="text-muted-foreground">г. Москва, ул. Примерная, 1</p>
-            </Card>
+              <Card className="p-6 space-y-3 hover:shadow-lg transition-shadow">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                    <Icon name="MapPin" size={24} className="text-primary" />
+                  </div>
+                  <div className="text-left">
+                    <h3 className="font-semibold">Адрес</h3>
+                    <p className="text-muted-foreground">г. Москва, ул. Примерная, 1</p>
+                  </div>
+                </div>
+              </Card>
+            </div>
+
+            <div className="relative">
+              <div className="relative overflow-hidden rounded-2xl shadow-2xl">
+                <img
+                  src="https://cdn.poehali.dev/files/3f2f2651-6071-442e-b580-5891b98a8e79.png"
+                  alt="Максим - основатель МаксВЛавашике"
+                  className="w-full h-auto object-cover"
+                />
+              </div>
+              <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-primary/20 rounded-full blur-3xl"></div>
+              <div className="absolute -top-6 -left-6 w-32 h-32 bg-primary/10 rounded-full blur-3xl"></div>
+            </div>
           </div>
         </div>
       </section>
