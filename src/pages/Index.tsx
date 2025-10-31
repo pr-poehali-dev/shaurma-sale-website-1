@@ -13,7 +13,7 @@ interface MenuItem {
   id: number;
   name: string;
   description: string;
-  price: number;
+  prices: { small: number; medium: number; large: number };
   image: string;
 }
 
@@ -26,44 +26,40 @@ interface Addon {
 const menuItems: MenuItem[] = [
   {
     id: 1,
-    name: 'Классическая шаурма',
-    description: 'Куриное мясо, свежие овощи, фирменный соус',
-    price: 350,
+    name: 'Шаурма классическая',
+    description: 'Курица, огурец, капуста, помидор, чесночный и томатный соус',
+    prices: { small: 230, medium: 270, large: 300 },
     image: 'https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=800&q=80'
   },
   {
     id: 2,
-    name: 'Говяжья шаурма',
-    description: 'Говядина, маринованные огурцы, острый соус',
-    price: 420,
+    name: 'Шаурма восточная',
+    description: 'Курица, огурец, капуста, помидор, зелень, морковь, чесночный и томатный соус',
+    prices: { small: 250, medium: 290, large: 320 },
     image: 'https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?w=800&q=80'
   },
   {
     id: 3,
-    name: 'Фалафель шаурма',
-    description: 'Хрустящий фалафель, хумус, свежие овощи',
-    price: 320,
+    name: 'Бртуч классический',
+    description: 'Курица, огурец, картофель, помидор, чесночный и томатный соус',
+    prices: { small: 230, medium: 270, large: 300 },
     image: 'https://images.unsplash.com/photo-1628408891486-4cce6f18b0bb?w=800&q=80'
-  },
-  {
-    id: 4,
-    name: 'Микс шаурма',
-    description: 'Курица и говядина, сырный соус, овощи',
-    price: 450,
-    image: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=800&q=80'
   }
 ];
 
 const addons: Addon[] = [
-  { id: 1, name: 'Сыр', price: 50 },
-  { id: 2, name: 'Двойное мясо', price: 150 },
-  { id: 3, name: 'Острый соус', price: 30 },
-  { id: 4, name: 'Сырный соус', price: 40 },
-  { id: 5, name: 'Маринованные огурцы', price: 30 }
+  { id: 1, name: 'Сыр', price: 30 },
+  { id: 2, name: 'Острый перец', price: 30 },
+  { id: 3, name: 'Дополнительный соус', price: 30 },
+  { id: 4, name: 'Coca-Cola 0.5л', price: 100 },
+  { id: 5, name: 'Fanta 0.5л', price: 100 },
+  { id: 6, name: 'Sprite 0.5л', price: 100 },
+  { id: 7, name: 'Вода 0.5л', price: 50 }
 ];
 
 export default function Index() {
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
+  const [selectedSize, setSelectedSize] = useState<'small' | 'medium' | 'large'>('medium');
   const [selectedAddons, setSelectedAddons] = useState<number[]>([]);
   const [orderForm, setOrderForm] = useState({ name: '', phone: '', address: '' });
   const [activeSection, setActiveSection] = useState('hero');
@@ -76,11 +72,13 @@ export default function Index() {
 
   const calculateTotal = () => {
     if (!selectedItem) return 0;
+    const basePrice = selectedItem.prices[selectedSize];
     const addonsTotal = selectedAddons.reduce((sum, addonId) => {
       const addon = addons.find(a => a.id === addonId);
       return sum + (addon?.price || 0);
     }, 0);
-    return selectedItem.price + addonsTotal;
+    const deliveryFee = 200;
+    return basePrice + addonsTotal + deliveryFee;
   };
 
   const handleSubmitOrder = (e: React.FormEvent) => {
@@ -91,6 +89,7 @@ export default function Index() {
     }
     toast.success('Заказ оформлен! Ожидайте звонка оператора');
     setSelectedItem(null);
+    setSelectedSize('medium');
     setSelectedAddons([]);
     setOrderForm({ name: '', phone: '', address: '' });
   };
@@ -130,13 +129,13 @@ export default function Index() {
           <div className="max-w-3xl mx-auto text-center space-y-6 animate-fade-in">
             <Badge className="mb-4" variant="secondary">
               <Icon name="Star" size={16} className="mr-1" />
-              Бесплатная доставка от 500₽
+              Доставка 200₽
             </Badge>
             <h1 className="text-5xl md:text-6xl font-bold tracking-tight">
               Самая вкусная шаурма <span className="text-primary">в городе</span>
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Готовим из свежих продуктов с любовью. Быстрая доставка за 30 минут или бесплатно
+              Готовим из свежих продуктов с любовью. Доставляем в течение дня
             </p>
             <div className="flex gap-4 justify-center pt-4">
               <Button size="lg" onClick={() => scrollToSection('menu')} className="text-base">
@@ -158,7 +157,7 @@ export default function Index() {
             <p className="text-muted-foreground text-lg">Выберите свою идеальную шаурму</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
             {menuItems.map((item) => (
               <Card
                 key={item.id}
@@ -178,10 +177,22 @@ export default function Index() {
                 <div className="p-5 space-y-3">
                   <h3 className="font-semibold text-lg">{item.name}</h3>
                   <p className="text-sm text-muted-foreground line-clamp-2">{item.description}</p>
-                  <div className="flex items-center justify-between pt-2">
-                    <span className="text-2xl font-bold text-primary">{item.price}₽</span>
-                    <Button size="sm" variant="outline">
+                  <div className="pt-2">
+                    <div className="flex items-center justify-between text-sm mb-1">
+                      <span className="text-muted-foreground">Маленькая</span>
+                      <span className="font-semibold text-primary">{item.prices.small}₽</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm mb-1">
+                      <span className="text-muted-foreground">Средняя</span>
+                      <span className="font-semibold text-primary">{item.prices.medium}₽</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-muted-foreground">Большая</span>
+                      <span className="font-semibold text-primary">{item.prices.large}₽</span>
+                    </div>
+                    <Button size="sm" variant="outline" className="w-full mt-3">
                       <Icon name="Plus" size={16} />
+                      <span className="ml-2">Выбрать</span>
                     </Button>
                   </div>
                 </div>
@@ -204,12 +215,44 @@ export default function Index() {
                       <div>
                         <h4 className="font-semibold text-lg">{selectedItem.name}</h4>
                         <p className="text-sm text-muted-foreground">{selectedItem.description}</p>
-                        <p className="text-primary font-bold mt-2">{selectedItem.price}₽</p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <Label className="text-base font-semibold">Выберите размер:</Label>
+                      <div className="grid grid-cols-3 gap-3">
+                        <Button
+                          type="button"
+                          variant={selectedSize === 'small' ? 'default' : 'outline'}
+                          onClick={() => setSelectedSize('small')}
+                          className="flex flex-col h-auto py-3"
+                        >
+                          <span className="text-xs">Маленькая</span>
+                          <span className="font-bold">{selectedItem.prices.small}₽</span>
+                        </Button>
+                        <Button
+                          type="button"
+                          variant={selectedSize === 'medium' ? 'default' : 'outline'}
+                          onClick={() => setSelectedSize('medium')}
+                          className="flex flex-col h-auto py-3"
+                        >
+                          <span className="text-xs">Средняя</span>
+                          <span className="font-bold">{selectedItem.prices.medium}₽</span>
+                        </Button>
+                        <Button
+                          type="button"
+                          variant={selectedSize === 'large' ? 'default' : 'outline'}
+                          onClick={() => setSelectedSize('large')}
+                          className="flex flex-col h-auto py-3"
+                        >
+                          <span className="text-xs">Большая</span>
+                          <span className="font-bold">{selectedItem.prices.large}₽</span>
+                        </Button>
                       </div>
                     </div>
 
                     <div className="space-y-4">
-                      <Label className="text-base font-semibold">Добавки:</Label>
+                      <Label className="text-base font-semibold">Добавки и напитки:</Label>
                       {addons.map((addon) => (
                         <div key={addon.id} className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 transition-colors">
                           <div className="flex items-center gap-3">
@@ -227,7 +270,24 @@ export default function Index() {
                       ))}
                     </div>
 
-                    <div className="p-4 bg-primary/10 rounded-lg">
+                    <div className="p-4 bg-primary/10 rounded-lg space-y-2">
+                      <div className="flex justify-between items-center text-sm">
+                        <span>Блюдо:</span>
+                        <span className="font-semibold">{selectedItem.prices[selectedSize]}₽</span>
+                      </div>
+                      {selectedAddons.length > 0 && (
+                        <div className="flex justify-between items-center text-sm">
+                          <span>Добавки:</span>
+                          <span className="font-semibold">
+                            {selectedAddons.reduce((sum, id) => sum + (addons.find(a => a.id === id)?.price || 0), 0)}₽
+                          </span>
+                        </div>
+                      )}
+                      <div className="flex justify-between items-center text-sm">
+                        <span>Доставка:</span>
+                        <span className="font-semibold">200₽</span>
+                      </div>
+                      <Separator />
                       <div className="flex justify-between items-center text-lg font-bold">
                         <span>Итого:</span>
                         <span className="text-2xl text-primary">{calculateTotal()}₽</span>
@@ -283,6 +343,7 @@ export default function Index() {
                       className="w-full"
                       onClick={() => {
                         setSelectedItem(null);
+                        setSelectedSize('medium');
                         setSelectedAddons([]);
                       }}
                     >
@@ -308,16 +369,16 @@ export default function Index() {
               <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
                 <Icon name="Clock" size={32} className="text-primary" />
               </div>
-              <h3 className="text-xl font-semibold">30 минут</h3>
-              <p className="text-muted-foreground">Среднее время доставки. Если опоздаем — доставка бесплатно</p>
+              <h3 className="text-xl font-semibold">В течение дня</h3>
+              <p className="text-muted-foreground">Доставляем свежую шаурму в удобное для вас время</p>
             </Card>
 
             <Card className="p-6 text-center space-y-4 hover:shadow-lg transition-shadow">
               <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
                 <Icon name="Banknote" size={32} className="text-primary" />
               </div>
-              <h3 className="text-xl font-semibold">От 500₽</h3>
-              <p className="text-muted-foreground">Бесплатная доставка при заказе от 500 рублей</p>
+              <h3 className="text-xl font-semibold">200₽</h3>
+              <p className="text-muted-foreground">Стоимость доставки по городу для любого заказа</p>
             </Card>
 
             <Card className="p-6 text-center space-y-4 hover:shadow-lg transition-shadow">
@@ -336,23 +397,10 @@ export default function Index() {
           <div className="max-w-3xl mx-auto text-center space-y-6">
             <h2 className="text-4xl font-bold mb-4">О нас</h2>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              Мы — команда энтузиастов, влюбленных в настоящую уличную еду. Наша миссия — делать вкусную и качественную шаурму доступной каждому. 
-              Используем только свежие продукты, фирменные рецепты соусов и готовим с душой.
+              Привет! Я Максим, самолично доставляю удовольствие для ваших ротиков. 
+              Каждую шаурму готовлю с душой и только из свежих продуктов. 
+              Буду рад накормить вас вкусно!
             </p>
-            <div className="grid grid-cols-3 gap-8 pt-8">
-              <div className="space-y-2">
-                <div className="text-4xl font-bold text-primary">5+</div>
-                <p className="text-sm text-muted-foreground">лет на рынке</p>
-              </div>
-              <div className="space-y-2">
-                <div className="text-4xl font-bold text-primary">50k+</div>
-                <p className="text-sm text-muted-foreground">довольных клиентов</p>
-              </div>
-              <div className="space-y-2">
-                <div className="text-4xl font-bold text-primary">4.9</div>
-                <p className="text-sm text-muted-foreground">средний рейтинг</p>
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -368,7 +416,7 @@ export default function Index() {
             <Card className="p-6 text-center space-y-3 hover:shadow-lg transition-shadow">
               <Icon name="Phone" size={32} className="mx-auto text-primary" />
               <h3 className="font-semibold">Телефон</h3>
-              <p className="text-muted-foreground">+7 (999) 123-45-67</p>
+              <p className="text-muted-foreground">+7 924 523 4812</p>
             </Card>
 
             <Card className="p-6 text-center space-y-3 hover:shadow-lg transition-shadow">
